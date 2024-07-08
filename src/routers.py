@@ -30,7 +30,7 @@ class BookDetail(Resource, BookParser):
 
     def get(self, id):
         book = Book.query.get_or_404(id)
-        return book.as_dict()
+        return book.as_dict(), 200
 
     def put(self, id):
         book = Book.query.get_or_404(id)
@@ -38,7 +38,7 @@ class BookDetail(Resource, BookParser):
         for key, value in args.items():
             setattr(book, key, value)
         db.session.commit()
-        return book.as_dict()
+        return book.as_dict(), 200
 
     def delete(self, id):
         book = Book.query.get_or_404(id)
