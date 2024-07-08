@@ -9,12 +9,8 @@ class BookSerializer:
         self.parser.add_argument(
             "title", type=str, required=True, help="Title cannot be blank!"
         )
-        self.parser.add_argument(
-            "author", type=str, required=True, help="Author cannot be blank!"
-        )
-        self.parser.add_argument(
-            "isbn", type=str, required=True, help="ISBN cannot be blank!"
-        )
+        self.parser.add_argument("author", type=str)
+        self.parser.add_argument("isbn", type=str)
         self.parser.add_argument("pages", type=int)
 
     def parse_args(self):

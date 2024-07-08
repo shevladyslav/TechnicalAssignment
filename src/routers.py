@@ -6,10 +6,13 @@ from .models import Book
 from .serializers import BookSerializer
 
 
-class BookList(Resource):
+class BookParser:
 
     def __init__(self):
         self.parser = BookSerializer()
+
+
+class BookList(Resource, BookParser):
 
     def get(self):
         books = Book.query.all()
@@ -21,3 +24,24 @@ class BookList(Resource):
         db.session.add(book)
         db.session.commit()
         return book.as_dict(), 201
+
+
+class BookDetail(Resource, BookParser):
+
+    def get(self, id):
+        book = Book.query.get_or_404(id)
+        return book.as_dict()
+
+    def put(self, id):
+        book = Book.query.get_or_404(id)
+        args = self.parser.parse_args()
+        for key, value in args.items():
+            setattr(book, key, value)
+        db.session.commit()
+        return book.as_dict()
+
+    def delete(self, id):
+        book = Book.query.get_or_404(id)
+        db.session.delete(book)
+        db.session.commit()
+        return 204

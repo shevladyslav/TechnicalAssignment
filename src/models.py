@@ -6,8 +6,8 @@ class Book(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
-    author = db.Column(db.String(255), nullable=False)
-    isbn = db.Column(db.String(20), unique=True, nullable=False)
+    author = db.Column(db.String(255), nullable=True)
+    isbn = db.Column(db.String(20), unique=True, nullable=True)
     pages = db.Column(db.Integer)
 
     def __repr__(self):

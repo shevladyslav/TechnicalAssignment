@@ -3,7 +3,7 @@ from flask_restful import Api
 
 from .database import db, migrate
 from .models import *
-from .routers import BookList
+from .routers import BookDetail, BookList
 
 
 def create_app():
@@ -15,5 +15,6 @@ def create_app():
 
     api = Api(app, prefix="/api/v1")
     api.add_resource(BookList, "/books")
+    api.add_resource(BookDetail, "/books/<int:id>")
 
     return app
