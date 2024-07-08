@@ -1,5 +1,12 @@
+# Flask Base
 Flask==3.0.3
 Flask-SQLAlchemy==3.1.1
 Flask-RESTful==0.3.10
 Flask-Migrate==4.0.7
+
+# Code formatter
 pre-commit==3.7.1
+
+# Testing
+pytest==8.2.2
+coverage==7.5.4

@@ -1,0 +1,14 @@
+[run]
+source = src
+branch = True
+
+[report]
+omit =
+    tests/*
+    src/__init__.py
+    src/database.py
+    src/models.py
+show_missing = True
+
+[html]
+directory = coverage_html_report

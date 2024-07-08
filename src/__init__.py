@@ -6,9 +6,13 @@ from .models import *
 from .routers import BookDetail, BookList
 
 
-def create_app():
+def create_app(config_class=None):
     app = Flask(__name__)
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///books.db"
+
+    if config_class is not None:
+        app.config.from_object(config_class)
+    else:
+        app.config.from_object("config.DevelopmentConfig")
 
     db.init_app(app)
     migrate.init_app(app, db)

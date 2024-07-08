@@ -1,5 +1,6 @@
-from flask import request
 from flask_restful import Resource, reqparse
+from flask import make_response
+
 
 from .database import db
 from .models import Book
@@ -44,4 +45,4 @@ class BookDetail(Resource, BookParser):
         book = Book.query.get_or_404(id)
         db.session.delete(book)
         db.session.commit()
-        return 204
+        return make_response('', 204)
