@@ -72,8 +72,6 @@ Run the Flask server:
 
 `flask --app src run --debug`
 
-The Flask API will be accessible at:
-
 Frontend
 
 `cd frontend`
