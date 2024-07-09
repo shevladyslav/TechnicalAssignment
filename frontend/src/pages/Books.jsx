@@ -27,6 +27,7 @@ const Books = () => {
   const [validationErrors, setValidationErrors] = useState({});
   const [books, setBooks] = useState([]);
   const [publishedDate, setPublishedDate] = useState(null);
+  const [bookAction, setBookAction] = useState(0);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -39,7 +40,7 @@ const Books = () => {
     };
 
     fetchBooks();
-  }, []);
+  }, [bookAction]);
 
   const columns = useMemo(
     () => [
@@ -133,39 +134,49 @@ const Books = () => {
 
       const response = await axios.post(`${baseURL}api/v1/books`, dataToSend);
       table.setCreatingRow(null);
+      setBookAction(bookAction + 1);
     } catch (error) {
       setValidationErrors({ submit: 'Failed to create book' });
     }
   };
 
-  const openDeleteConfirmModal = (row) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      // deleteBook(row.original.id);
+  const deleteBook = async (id) => {
+    try {
+      await axios.delete(`${baseURL}api/v1/books/${id}`);
+      setBookAction(bookAction + 1);
+    } catch (error) {
+      console.error('Error deleting book:', error);
     }
   };
 
-    const handleSaveBook = async ({ values, table }) => {
-      const newValidationErrors = validateBook(values);
-      if (Object.values(newValidationErrors).some((error) => error)) {
-        setValidationErrors(newValidationErrors);
-        return;
-      }
+  const openDeleteConfirmModal = (row) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
+      deleteBook(row.original.id);
+    }
+  };
 
-      try {
-        const formattedDate = publishedDate ? dayjs(publishedDate).format('YYYY-MM-DD') : null;
+  const handleSaveBook = async ({ values, table }) => {
+    const newValidationErrors = validateBook(values);
+    if (Object.values(newValidationErrors).some((error) => error)) {
+      setValidationErrors(newValidationErrors);
+      return;
+    }
 
-        const dataToSend = {
-          ...values,
-          published_date: formattedDate,
-        };
+    try {
+      const formattedDate = publishedDate ? dayjs(publishedDate).format('YYYY-MM-DD') : null;
 
-        const response = await axios.put(`${baseURL}api/v1/books/${values.id}`, dataToSend);
-        table.setEditingRow(null);
-      } catch (error) {
-        setValidationErrors({ submit: 'Failed to update book' });
-      }
-    };
+      const dataToSend = {
+        ...values,
+        published_date: formattedDate,
+      };
 
+      const response = await axios.put(`${baseURL}api/v1/books/${values.id}`, dataToSend);
+      table.setEditingRow(null);
+      setBookAction(bookAction + 1);
+    } catch (error) {
+      setValidationErrors({ submit: 'Failed to update book' });
+    }
+  };
 
   const table = useMaterialReactTable({
     columns,
