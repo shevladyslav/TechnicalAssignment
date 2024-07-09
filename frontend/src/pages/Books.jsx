@@ -144,6 +144,29 @@ const Books = () => {
     }
   };
 
+    const handleSaveBook = async ({ values, table }) => {
+      const newValidationErrors = validateBook(values);
+      if (Object.values(newValidationErrors).some((error) => error)) {
+        setValidationErrors(newValidationErrors);
+        return;
+      }
+
+      try {
+        const formattedDate = publishedDate ? dayjs(publishedDate).format('YYYY-MM-DD') : null;
+
+        const dataToSend = {
+          ...values,
+          published_date: formattedDate,
+        };
+
+        const response = await axios.put(`${baseURL}api/v1/books/${values.id}`, dataToSend);
+        table.setEditingRow(null);
+      } catch (error) {
+        setValidationErrors({ submit: 'Failed to update book' });
+      }
+    };
+
+
   const table = useMaterialReactTable({
     columns,
     data: books,
@@ -153,6 +176,7 @@ const Books = () => {
     getRowId: (row) => row.id,
     onCreatingRowCancel: () => setValidationErrors({}),
     onCreatingRowSave: handleCreateBook,
+    onEditingRowSave: handleSaveBook,
     onEditingRowCancel: () => setValidationErrors({}),
     renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
       <>

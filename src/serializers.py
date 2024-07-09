@@ -16,10 +16,10 @@ class BookSerializer:
         self.parser.add_argument("pages", type=int)
         self.parser.add_argument("published_date", type=str)
 
-    def parse_args(self):
+    def parse_args(self, existing_isbn=None):
         args = self.parser.parse_args()
 
-        if args.get("isbn") and Book.query.filter_by(isbn=args["isbn"]).first():
+        if args.get("isbn") and args["isbn"] != existing_isbn and Book.query.filter_by(isbn=args["isbn"]).first():
             abort(400, message="ISBN already exists in the database")
 
         if published_date := args.pop("published_date", None):

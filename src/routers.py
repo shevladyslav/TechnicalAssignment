@@ -35,7 +35,7 @@ class BookDetail(Resource, BookParser):
 
     def put(self, id):
         book = Book.query.get_or_404(id)
-        args = self.parser.parse_args()
+        args = self.parser.parse_args(existing_isbn=book.isbn)
         for key, value in args.items():
             setattr(book, key, value)
         db.session.commit()
