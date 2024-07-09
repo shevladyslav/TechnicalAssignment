@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
 
 from .database import db, migrate
 from .models import *
@@ -8,6 +9,7 @@ from .routers import BookDetail, BookList
 
 def create_app(config_class=None):
     app = Flask(__name__)
+    CORS(app)
 
     if config_class is not None:
         app.config.from_object(config_class)
