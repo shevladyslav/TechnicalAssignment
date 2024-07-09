@@ -52,18 +52,58 @@ const Books = () => {
       {
         accessorKey: 'title',
         header: 'Title',
+        muiEditTextFieldProps: {
+          required: true,
+          error: !!validationErrors?.title,
+          helperText: validationErrors?.title,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              title: undefined,
+            }),
+        },
       },
       {
         accessorKey: 'author',
         header: 'Author',
+        muiEditTextFieldProps: {
+          required: true,
+          error: !!validationErrors?.author,
+          helperText: validationErrors?.author,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              author: undefined,
+            }),
+        },
       },
       {
         accessorKey: 'isbn',
         header: 'ISBN',
+        muiEditTextFieldProps: {
+          required: true,
+          error: !!validationErrors?.isbn,
+          helperText: validationErrors?.isbn,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              isbn: undefined,
+            }),
+        },
       },
       {
         accessorKey: 'pages',
         header: 'Pages',
+        muiEditTextFieldProps: {
+          required: true,
+          error: !!validationErrors?.pages,
+          helperText: validationErrors?.pages,
+          onFocus: () =>
+            setValidationErrors({
+              ...validationErrors,
+              pages: undefined,
+            }),
+        },
       },
       {
         accessorKey: 'published_date',
@@ -77,6 +117,12 @@ const Books = () => {
   );
 
   const handleCreateBook = async ({ values, table }) => {
+    const newValidationErrors = validateBook(values);
+    if (Object.values(newValidationErrors).some((error) => error)) {
+      setValidationErrors(newValidationErrors);
+      return;
+    }
+
     try {
       const formattedDate = publishedDate ? dayjs(publishedDate).format('YYYY-MM-DD') : null;
 
@@ -160,3 +206,25 @@ const Books = () => {
 };
 
 export default Books;
+
+const validateRequired = (value) => !!value && !!value.length;
+const validateInteger = (value) => Number.isInteger(Number(value));
+
+const validatePages = (value) => {
+  if (value === null || value === undefined || value === '') {
+    return 'Pages is Required';
+  }
+  if (!validateInteger(value)) {
+    return 'Pages must be an integer';
+  }
+  return '';
+};
+
+function validateBook(book) {
+  return {
+    title: !validateRequired(book.title) ? 'Title is Required' : '',
+    author: !validateRequired(book.author) ? 'Author is Required' : '',
+    isbn: !validateRequired(book.isbn) ? 'ISBN is Required' : '',
+    pages: validatePages(book.pages),
+  };
+}
