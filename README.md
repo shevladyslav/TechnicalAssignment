@@ -71,21 +71,3 @@ Initialize and migrate the database:
 Run the Flask server:
 
 `flask --app src run --debug`
-
-The Flask API will be accessible at:
-
-http://localhost:5000/api/v1/books
-
----
-
-Frontend
-
-`cd frontend`
-
-`npm install`
-
-`npm start`
-
-The frontend application will be available at:
-
-http://localhost:3000
